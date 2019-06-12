@@ -5,21 +5,28 @@ const Project = require('../../models/project');
 exports.createNewProject = async(req, res) => {
     const body = req.body;
     const project = await new Project(body).save();
-    res.json(project);
+    res.redirect(`/project/${project._id}`);
 };
 
 //reading
 //find a project by its ID
 // /projects/:id
-exports.findProjectById = async(req, res) => {
+exports.findProjectById = viewPath => async(req, res) => {
     const id = req.params.id;
     const project = await Project.findById(id);
-    res.json(projects);
+    res.render(viewPath, {project});
 };
+
+//old
+/*exports.findProjectById = async(req, res) => {
+    const id = req.params.id;
+    const project = await Project.findById(id);
+    res.render('projects/details', {projects});
+}; */
 //find all Projects
 exports.findAllProjects = async(req, res) => {
     const projects = await Project.find();
-    res.json(projects);
+    res.render('projects/list', {projects});
 };
 
 //updating
@@ -31,8 +38,13 @@ exports.updateProjectById = async(req, res) => {
         new: true,
         runValidators: true,
     });
-    res.json(project);
+    res.redirect(`/project/${project._id}`);
 };
 
 //deleting
 //delete a project based on its ID
+exports.deleteProjectById = async(req, res) => {
+    const id = req.params.id;
+    await Project.findByIdAndDelete(id);
+    res.redirect('/projects');
+};
