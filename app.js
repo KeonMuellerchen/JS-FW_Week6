@@ -4,11 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose');
-mongoose.connect(`mongodb+srv://kmueller:066981408Keon!@cluster0-bu7ln.mongodb.net/test?retryWrites=true&w=majority`, {useNewUrlParser: true});
+mongoose.connect(`mongodb+srv://kmueller:066981408@cluster0-bu7ln.mongodb.net/test?retryWrites=true&w=majority`, {useNewUrlParser: true});
 
 var db = mongoose.connection;
 db.on('error', err => console.error(err));
-db.once('open', () => console.log('Connected ot Mongodb'));
+db.once('open', () => console.log('Connected to Mongodb'));
 
 
 var indexRouter = require('./routes/index');
