@@ -42,8 +42,8 @@ app.use(
 app.use(passport.initialize()); //Initialize passport first
 app.use(passport.session()); //use passport with session
 
-//user static authenticate method of moel in LocalStrategy
-passport.use(new LocalStrategy(User.authentication()));
+// use static authenticate method of model in LocalStrategy
+passport.use(new LocalStrategy(User.authenticate()));
 
 //user static serialize and deserialize of model for passport session support
 passport.serializeUser(User.serializeUser());
