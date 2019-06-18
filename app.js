@@ -17,6 +17,7 @@ db.once('open', () => console.log('Connected to Mongodb'));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var authRouter = require('./routes/auth');
 
 var app = express();
 
@@ -48,6 +49,7 @@ passport.use(new LocalStrategy(User.authentication()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use('/', authRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
