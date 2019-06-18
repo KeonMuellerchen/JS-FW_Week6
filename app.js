@@ -4,13 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
+const User = require('./models/user');
+
 mongoose.connect(`mongodb+srv://kmueller:066981408@cluster0-bu7ln.mongodb.net/test?retryWrites=true&w=majority`, {useNewUrlParser: true});
 
 var db = mongoose.connection;
 db.on('error', err => console.error(err));
 db.once('open', () => console.log('Connected to Mongodb'));
-
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -35,11 +38,15 @@ app.use(
   saveUninitialized: true
   })
 );
+app.use(passport.initialize()); //Initialize passport first
+app.use(passport.session()); //use passport with session
 
-app.use((req, res, next) => {
-  console.log(req.session);
-  next();
-});
+//user static authenticate method of moel in LocalStrategy
+passport.use(new LocalStrategy(User.authentication()));
+
+//user static serialize and deserialize of model for passport session support
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
