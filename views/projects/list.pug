@@ -1,9 +1,11 @@
 extends ../layout
 
 block content
+.container
     h1 All Projects
 
-    a(href="/projects/new") Create Project
+    if isAuthenticated
+        a(href="/projects/new") Create Project
 
     ul
         each project in projects
