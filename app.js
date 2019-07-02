@@ -6,6 +6,7 @@ var logger = require('morgan');
 const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const GithubStrategy = require('passport-github').Strategy;
 const mongoose = require('mongoose');
 const User = require('./models/user');
 
@@ -49,6 +50,21 @@ app.use((req, res, next) => {
 
 // use static authenticate method of model in LocalStrategy
 passport.use(new LocalStrategy(User.authenticate()));
+
+passport.use(
+  new GithubStrategy(
+    {
+      clientID: '13a5a8e7509caafc51b9',
+      clientSecret: '0cb4f558339d90c3b819d660d0f024a7828be317',
+      callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+    },
+    function(accessToken, refreshToken, profile, cb) {
+      User.findOrCreate({ githubId: profile.id }, function (err, user) {
+        return cb(err, user);
+      });
+    }
+  )
+);
 
 //user static serialize and deserialize of model for passport session support
 passport.serializeUser(User.serializeUser());
