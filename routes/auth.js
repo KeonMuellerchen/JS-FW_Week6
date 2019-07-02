@@ -20,7 +20,7 @@ router.post(
 router.get('/auth/github', passport.authenticate('github'));
 
 //callback on github login
-app.get('/auth/github/callback', 
+router.get('/auth/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   function(req, res) {
     // Successful authentication, redirect home.
