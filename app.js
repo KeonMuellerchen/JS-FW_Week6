@@ -59,8 +59,14 @@ passport.use(
       callbackURL: "http://127.0.0.1:3000/auth/github/callback"
     },
     function(accessToken, refreshToken, profile, cb) {
-      User.findOrCreate({ githubId: profile.id }, function (err, user) {
-        return cb(err, user);
+      User.findOne({ githubId: profile.id }, function(err, user) {
+        if (!err && !user) {
+          const newgithub = new User(profile);
+          newgithub.save();
+          return cb(null, newgithub);
+        } else {
+          return cb(err, user);
+        }
       });
     }
   )
