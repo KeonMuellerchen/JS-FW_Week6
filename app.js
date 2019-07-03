@@ -7,6 +7,7 @@ const session = require('express-session');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const GithubStrategy = require('passport-github').Strategy;
+const Google = require('passport-github').Strategy;
 const mongoose = require('mongoose');
 const User = require('./models/user');
 
